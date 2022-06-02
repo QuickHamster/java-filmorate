@@ -16,8 +16,8 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(
-        //value = "/api/v1/films",
-        value = "/films",
+        //value = "/api/v1/films",  // for production
+        value = "/films",           // for Postman tests
         consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
 )
@@ -26,7 +26,7 @@ public class FilmController {
     private final Map<Long, Film> films = new HashMap<>();
     private final int MAX_DESCRIPTION_LEN = 200;
 
-    @GetMapping("/list")
+    @GetMapping //("/list") // for production
     public Collection<Film> getFilms() {
         log.debug("Текущее количество фильмов: {}", films.size());
         return films.values();
