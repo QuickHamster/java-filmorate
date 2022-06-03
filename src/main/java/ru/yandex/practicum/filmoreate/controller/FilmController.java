@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(
-        //value = "/api/v1/films",  // for production
+        //value = "/api/v1/films",  // T0D0 for production
         value = "/films",           // for Postman tests
         consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
@@ -26,7 +26,7 @@ public class FilmController {
     private final Map<Long, Film> films = new HashMap<>();
     private final int MAX_DESCRIPTION_LEN = 200;
 
-    @GetMapping //("/list") // for production
+    @GetMapping //("/list") // T0D0 for production
     public Collection<Film> getFilms() {
         log.debug("Текущее количество фильмов: {}", films.size());
         return films.values();
@@ -52,7 +52,7 @@ public class FilmController {
 
             if (film.getName().isBlank()) {
                 log.debug("Пустое название фильма");
-                throw new InvalidEmailException("Название фильма не должно быть пустым.");
+                throw new InvalidFilmName("Название фильма не должно быть пустым.");
             }
 
             if (film.getDescription().length() > MAX_DESCRIPTION_LEN) {

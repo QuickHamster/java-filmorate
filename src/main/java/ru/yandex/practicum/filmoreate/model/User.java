@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmoreate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class User {
 
     private Long id;
@@ -25,7 +25,6 @@ public class User {
     private String login;
 
     @NonNull
-    //@NotBlank(message = "Name is required.")
     private String name;
 
     @NonNull

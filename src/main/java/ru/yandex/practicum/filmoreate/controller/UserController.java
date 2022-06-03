@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(
-        //value = "/api/v1/users",  // for production
+        //value = "/api/v1/users",  // T0D0 for production
         value = "/users",           // for Postman tests
         consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
@@ -25,7 +25,7 @@ public class UserController {
 
     private final Map<Long, User> users = new HashMap<>();
 
-    @GetMapping// ("/list") // for production
+    @GetMapping// ("/list") // T0D0 for production
     public Collection<User> getUsers() {
         log.debug("Текущее количество пользователей: {}", users.size());
         return users.values();
