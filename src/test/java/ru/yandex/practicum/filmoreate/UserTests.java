@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmoreate.exception.InvalidEmailException;
 import ru.yandex.practicum.filmoreate.exception.InvalidUserBirthday;
 import ru.yandex.practicum.filmoreate.exception.InvalidUserLogin;
 import ru.yandex.practicum.filmoreate.exception.ValidationException;
-import ru.yandex.practicum.filmoreate.model.Film;
 import ru.yandex.practicum.filmoreate.model.User;
 
 import java.time.LocalDate;
