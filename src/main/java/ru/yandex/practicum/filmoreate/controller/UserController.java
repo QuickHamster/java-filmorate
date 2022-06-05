@@ -16,8 +16,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(
-        //value = "/api/v1/users",  // T0D0 for production
-        value = "/users",           // for Postman tests
+        value = "/users",           
         consumes = MediaType.ALL_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
 )
@@ -25,27 +24,27 @@ public class UserController {
 
     private final Map<Long, User> users = new HashMap<>();
 
-    @GetMapping// ("/list") // T0D0 for production
+    @GetMapping
     public Collection<User> getUsers() {
         log.debug("Текущее количество пользователей: {}", users.size());
         return users.values();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User create(@Valid @RequestBody User user)  {
-        userOperation(true, user);
-        log.debug("Добавлен пользователь: " + user);
+    public User create(@Valid @RequestBody User user) {
+        userProcessing(true, user);
+        log.debug("Добавлен пользователь: {}", user);
         return user;
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public User put(@Valid @RequestBody User user) {
-        userOperation(false, user);
-        log.debug("Обновлен пользователь: " + user);
+        userProcessing(false, user);
+        log.debug("Обновлен пользователь: {}", user);
         return user;
     }
 
-    private void userOperation (boolean newUser, User user)  {
+    private void userProcessing(boolean newUser, User user) {
 
         if (user != null) {
 
@@ -79,7 +78,10 @@ public class UserController {
                 users.put(user.getId(), user);
             } else if (users.containsKey(user.getId())) {
                 users.put(user.getId(), user);
-            } else throw new ValidationException("Пользователь с id = " + user.getId() + " не существует.");
+            } else {
+                log.debug("Пользователь с id = {} не существует.", user.getId());
+                throw new ValidationException("Пользователь с id = " + user.getId() + " не существует.");
+            }
 
         } else {
             log.debug("Пустое тело запроса.");
