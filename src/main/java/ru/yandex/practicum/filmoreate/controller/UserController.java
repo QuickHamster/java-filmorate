@@ -32,19 +32,19 @@ public class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public User create(@Valid @RequestBody User user) {
-        userProcessing(true, user);
+        makeUser(true, user);
         log.debug("Добавлен пользователь: {}", user);
         return user;
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public User put(@Valid @RequestBody User user) {
-        userProcessing(false, user);
+        makeUser(false, user);
         log.debug("Обновлен пользователь: {}", user);
         return user;
     }
 
-    private void userProcessing(boolean newUser, User user) {
+    private void makeUser(boolean newUser, User user) {
 
         if (user != null) {
 

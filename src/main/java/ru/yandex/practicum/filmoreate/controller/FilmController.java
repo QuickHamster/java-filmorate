@@ -34,19 +34,19 @@ public class FilmController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film create(@Valid @RequestBody Film film) {
-        filmProcessing(true, film);
+        makeFilm(true, film);
         log.debug("Добавлен фильм: {}", film);
         return film;
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film put(@Valid @RequestBody Film film) {
-        filmProcessing(false, film);
+        makeFilm(false, film);
         log.debug("Обновлен фильм: {}", film);
         return film;
     }
 
-    private void filmProcessing(boolean newFilm, Film film) {
+    private void makeFilm(boolean newFilm, Film film) {
 
         if (film != null) {
 
