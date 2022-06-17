@@ -31,4 +31,12 @@ public class Film {
     @NonNull
     @Positive(message = "Duration film should be positive.")
     private Integer duration;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class UserTests {
-    private static final UserController userController = new UserController();
+    /*private static final UserController userController = new UserController();
     private User user;
 
     @BeforeEach
@@ -96,5 +96,5 @@ class UserTests {
         user = null;
         Exception exception = assertThrows(ValidationException.class, () -> userController.create(user));
         assertEquals("Тело запроса не должно быть пустым.", exception.getMessage());
-    }
+    }*/
 }

@@ -3,15 +3,11 @@ package ru.yandex.practicum.filmoreate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmoreate.exception.*;
 import ru.yandex.practicum.filmoreate.model.User;
-import ru.yandex.practicum.filmoreate.utils.IdGenerator;
+import ru.yandex.practicum.filmoreate.storage.InMemoryUserStorage;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,71 +17,31 @@ import java.util.Map;
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class UserController {
+    private final InMemoryUserStorage inMemoryUserStorage;
 
-    private final Map<Long, User> users = new HashMap<>();
+    public UserController(InMemoryUserStorage inMemoryUserStorage) {
+        this.inMemoryUserStorage = inMemoryUserStorage;
+    }
 
     @GetMapping
     public Collection<User> getUsers() {
-        log.debug("Текущее количество пользователей: {}", users.size());
-        return users.values();
+        log.debug("Текущее количество пользователей: {}", inMemoryUserStorage.getUsers().size());
+        return inMemoryUserStorage.getUsers();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public User create(@Valid @RequestBody User user) {
-        makeUser(true, user);
-        log.debug("Добавлен пользователь: {}", user);
-        return user;
+        long userId = inMemoryUserStorage.add(user);
+        log.debug("Добавлен пользователь: {}", inMemoryUserStorage.findUserById(userId));
+        return inMemoryUserStorage.findUserById(userId);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public User put(@Valid @RequestBody User user) {
-        makeUser(false, user);
-        log.debug("Обновлен пользователь: {}", user);
-        return user;
+        long userId = inMemoryUserStorage.update(user);
+        log.debug("Обновлен пользователь: {}", inMemoryUserStorage.findUserById(userId));
+        return inMemoryUserStorage.findUserById(userId);
     }
 
-    private void makeUser(boolean newUser, User user) {
 
-        if (user != null) {
-
-            if (user.getEmail().isBlank()) {
-                log.debug("Пустое поле адреса электронной почты.");
-                throw new InvalidEmailException("Адрес электронной почты не должен быть пустым.");
-            }
-
-            if (!user.getEmail().contains("@")) {
-                log.debug("В поле адреса электронной почты отсутствует символ '@'.");
-                throw new InvalidEmailException("Неверный формат адреса электронной почты (отсутствует символ '@').");
-            }
-
-            if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-                log.debug("Некорректное значение поле логина.");
-                throw new InvalidUserLogin("Логин пользователя пустой или содержит символ 'пробел'.");
-            }
-
-            if (user.getName().isBlank()) {
-                log.info("Пустое имя пользователя - подстановка логина.");
-                user.setName(user.getLogin());
-            }
-
-            if (user.getBirthday().isAfter(LocalDate.now())) {
-                log.debug("Некорректное значение даты рождения.");
-                throw new InvalidUserBirthday("Пользователи нарушившие пространственно-временной континуум не допускаются к регистрации (дата рождения не может быть в будущем).");
-            }
-
-            if (newUser) {
-                user.setId(IdGenerator.createUserId());
-                users.put(user.getId(), user);
-            } else if (users.containsKey(user.getId())) {
-                users.put(user.getId(), user);
-            } else {
-                log.debug("Пользователь с id = {} не существует.", user.getId());
-                throw new ValidationException("Пользователь с id = " + user.getId() + " не существует.");
-            }
-
-        } else {
-            log.debug("Пустое тело запроса.");
-            throw new ValidationException("Тело запроса не должно быть пустым.");
-        }
-    }
 }
