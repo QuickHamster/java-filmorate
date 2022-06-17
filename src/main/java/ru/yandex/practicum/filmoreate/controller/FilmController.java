@@ -49,5 +49,8 @@ public class FilmController {
         return inMemoryFilmStorage.findFilmById(filmId);
     }
 
-
+    @DeleteMapping
+    public Long remove(@Valid Long filmId) {
+        return inMemoryFilmStorage.delete(filmId);
+    }
 }

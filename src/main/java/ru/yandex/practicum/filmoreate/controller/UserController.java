@@ -43,5 +43,8 @@ public class UserController {
         return inMemoryUserStorage.findUserById(userId);
     }
 
-
+    @DeleteMapping
+    public Long remove(@Valid Long userId) {
+        return inMemoryUserStorage.delete(userId);
+    }
 }

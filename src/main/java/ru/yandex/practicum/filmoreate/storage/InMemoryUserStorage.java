@@ -23,13 +23,16 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public long delete(User user) {
-        return makeUser(false, user);
+    public long delete(long userId) {
+        if (users.containsKey(userId)) {
+            users.remove(userId);
+            return userId;
+        } else throw new FilmNotFoundException(String.format("Пользователь # %d не найден.", userId));
     }
 
     @Override
     public long update(User user) {
-        return 0;
+        return makeUser(false, user);
     }
 
     private long makeUser(boolean newUser, User user) {
