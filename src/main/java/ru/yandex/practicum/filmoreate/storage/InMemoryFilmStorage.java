@@ -79,10 +79,12 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 
+    @Override
     public List<Film> getFilms() {
         return Collections.list(Collections.enumeration(films.values()));
     }
 
+    @Override
     public Film findFilmById(Long filmId) {
         return films.values().stream()
                 .filter(p -> p.getId().equals(filmId))

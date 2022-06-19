@@ -1,16 +1,15 @@
 package ru.yandex.practicum.filmoreate.storage;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmoreate.exception.*;
 import ru.yandex.practicum.filmoreate.model.User;
 import ru.yandex.practicum.filmoreate.utils.IdGenerator;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -82,14 +81,21 @@ public class InMemoryUserStorage implements UserStorage {
         }
     }
 
+    @Override
     public List<User> getUsers() {
         return Collections.list(Collections.enumeration(users.values()));
     }
 
+    @Override
     public User findUserById(Long userId) {
         return users.values().stream()
                 .filter(p -> p.getId().equals(userId))
                 .findFirst()
-                .orElseThrow(() -> new FilmNotFoundException(String.format("Пользователь # %d не найден.", userId)));
+                .orElseThrow(() -> new ValidationException(String.format("Пользователь # %d не найден.", userId)));
+    }
+
+    @Override
+    public List<User> getFriendsList() {
+        return Collections.list(Collections.enumeration(users.values()));
     }
 }

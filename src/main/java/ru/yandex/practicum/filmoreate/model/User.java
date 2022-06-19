@@ -8,11 +8,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 public class User {
-
     private Long id;
 
     @NonNull
@@ -30,6 +31,5 @@ public class User {
     @NonNull
     @Past(message = "Invalid past date birthday.")
     private LocalDate birthday;
-
 }
 
