@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.yandex.practicum.filmoreate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmoreate.exception.ValidationException;
 
 import java.util.Map;
@@ -13,7 +14,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Integer> handleHappinessOverflow(final ValidationException e) {
+    public Map<String, Integer> handleValidationException(final ValidationException e) { //handleHappinessOverflow
+        return Map.of(e.getMessage(), e.hashCode());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Integer> handleFilmNotFoundException(final FilmNotFoundException e) { //handleHappinessOverflow
         return Map.of(e.getMessage(), e.hashCode());
     }
 

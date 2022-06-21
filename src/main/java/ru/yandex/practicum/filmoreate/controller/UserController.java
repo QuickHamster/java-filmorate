@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmoreate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmoreate.model.User;
@@ -9,7 +8,6 @@ import ru.yandex.practicum.filmoreate.service.UserService;
 import ru.yandex.practicum.filmoreate.storage.InMemoryUserStorage;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
