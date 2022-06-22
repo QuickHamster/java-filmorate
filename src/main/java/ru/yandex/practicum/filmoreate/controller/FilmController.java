@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmoreate.model.Film;
 
 import ru.yandex.practicum.filmoreate.service.FilmService;
 import ru.yandex.practicum.filmoreate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmoreate.storage.InMemoryLikesStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -22,10 +23,12 @@ import java.util.List;
 public class FilmController {
     private final InMemoryFilmStorage inMemoryFilmStorage;
     private final FilmService filmService;
+    private final InMemoryLikesStorage inMemoryLikesStorage;
 
-    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, FilmService filmService) {
+    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, FilmService filmService, InMemoryLikesStorage inMemoryLikesStorage) {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
         this.filmService = filmService;
+        this.inMemoryLikesStorage = inMemoryLikesStorage;
     }
 
     @GetMapping
@@ -37,6 +40,7 @@ public class FilmController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film create(@Valid @RequestBody Film film) {
         long filmId = inMemoryFilmStorage.add(film);
+        inMemoryLikesStorage.addFilmToLikesStorage(filmId);
         log.debug("Добавлен фильм: {}", inMemoryFilmStorage.findFilmById(filmId));
         return inMemoryFilmStorage.findFilmById(filmId);
     }
@@ -50,6 +54,7 @@ public class FilmController {
 
     @DeleteMapping
     public Long remove(@Valid Long filmId) {
+        inMemoryLikesStorage.removeFilmFromLikesStorage(filmId);
         return inMemoryFilmStorage.delete(filmId);
     }
 

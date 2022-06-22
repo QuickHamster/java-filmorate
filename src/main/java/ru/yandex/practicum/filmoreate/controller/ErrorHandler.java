@@ -14,13 +14,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Integer> handleValidationException(final ValidationException e) { //handleHappinessOverflow
+    public Map<String, Integer> handleValidationException(final ValidationException e) {
         return Map.of(e.getMessage(), e.hashCode());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Integer> handleFilmNotFoundException(final FilmNotFoundException e) { //handleHappinessOverflow
+    public Map<String, Integer> handleFilmNotFoundException(final FilmNotFoundException e) {
         return Map.of(e.getMessage(), e.hashCode());
     }
 

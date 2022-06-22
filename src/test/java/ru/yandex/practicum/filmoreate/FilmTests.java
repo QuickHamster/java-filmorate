@@ -6,6 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmoreate.controller.FilmController;
 import ru.yandex.practicum.filmoreate.exception.*;
 import ru.yandex.practicum.filmoreate.model.Film;
+import ru.yandex.practicum.filmoreate.service.FilmService;
+import ru.yandex.practicum.filmoreate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmoreate.storage.InMemoryLikesStorage;
+import ru.yandex.practicum.filmoreate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -16,12 +20,21 @@ import static ru.yandex.practicum.filmoreate.utils.FilmUtil.MAX_DESCRIPTION_LEN;
 
 @SpringBootTest
 class FilmTests {
-/*    private static final FilmController filmController = new FilmController();
+    private InMemoryFilmStorage inMemoryFilmStorage;
+    private FilmService filmService;
+    private InMemoryLikesStorage inMemoryLikesStorage;
+    private FilmController filmController;
+    private InMemoryUserStorage inMemoryUserStorage;
     private Film film;
 
     @BeforeEach
     public void beforeEach() {
         film = new Film(0L, "name", "description", LocalDate.now().minusYears(1), 110);
+        this.inMemoryFilmStorage = new InMemoryFilmStorage();
+        this.inMemoryLikesStorage = new InMemoryLikesStorage();
+        this.inMemoryUserStorage = new InMemoryUserStorage();
+        this.filmService = new FilmService(this.inMemoryFilmStorage, this.inMemoryLikesStorage, this.inMemoryUserStorage);
+        this.filmController = new FilmController(inMemoryFilmStorage, filmService, inMemoryLikesStorage);
     }
 
     @Test
@@ -75,5 +88,5 @@ class FilmTests {
         film = null;
         Exception exception = assertThrows(ValidationException.class, () -> filmController.create(film));
         assertEquals("Тело запроса не должно быть пустым.", exception.getMessage());
-    }*/
+    }
 }
