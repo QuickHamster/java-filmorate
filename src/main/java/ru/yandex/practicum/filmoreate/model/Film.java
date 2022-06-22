@@ -9,12 +9,19 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import static ru.yandex.practicum.filmoreate.utils.FilmUtil.MAX_DESCRIPTION_LEN;
 
 @Data
 @AllArgsConstructor
 public class Film {
+
+    /*public Film() {
+        this.likes = new HashSet<>();
+    }*/
+
     private Long id;
 
     @NonNull
@@ -35,6 +42,8 @@ public class Film {
     @NonNull
     private Integer rate;
 
+    //private Set<Long> likes;
+
     public Long getId() {
         return id;
     }
@@ -42,4 +51,13 @@ public class Film {
     public void setId(Long id) {
         this.id = id;
     }
+
+   /* public Set<Long> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Long> likes) {
+        this.likes = likes;
+        rate = likes.size();
+    }*/
 }

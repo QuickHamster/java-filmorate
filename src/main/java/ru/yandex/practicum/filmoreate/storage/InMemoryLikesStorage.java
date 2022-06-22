@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmoreate.storage;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmoreate.model.Film;
 
 import java.util.*;
 
@@ -40,10 +39,10 @@ public class InMemoryLikesStorage {
         return likes;
     }
 
-    /*public Set<Long> getLikesByFilmId(Long filmId) {
+    public Set<Long> getLikesByFilmId(Long filmId) {
         if (likes.containsKey(filmId)) {
             return likes.get(filmId);
         } else return null;
-    }*/
+    }
 
 }
