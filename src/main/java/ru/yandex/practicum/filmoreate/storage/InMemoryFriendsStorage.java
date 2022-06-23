@@ -13,7 +13,7 @@ public class InMemoryFriendsStorage {
     private final Map<Long, Set<Long>> friends;
 
     public InMemoryFriendsStorage() {
-        friends = new HashMap<Long, Set<Long>>();
+        friends = new HashMap<>();
     }
 
     public boolean addFriendsToUser(Long friendsId, Long userId) {

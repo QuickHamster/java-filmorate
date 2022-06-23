@@ -1,9 +1,7 @@
 package ru.yandex.practicum.filmoreate.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmoreate.exception.*;
 import ru.yandex.practicum.filmoreate.model.User;
 import ru.yandex.practicum.filmoreate.utils.IdGenerator;
