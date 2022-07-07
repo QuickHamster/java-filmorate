@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class User {
-
     private Long id;
 
     @NonNull
@@ -30,6 +29,5 @@ public class User {
     @NonNull
     @Past(message = "Invalid past date birthday.")
     private LocalDate birthday;
-
 }
 

@@ -9,6 +9,9 @@ import ru.yandex.practicum.filmoreate.exception.InvalidUserBirthday;
 import ru.yandex.practicum.filmoreate.exception.InvalidUserLogin;
 import ru.yandex.practicum.filmoreate.exception.ValidationException;
 import ru.yandex.practicum.filmoreate.model.User;
+import ru.yandex.practicum.filmoreate.service.UserService;
+import ru.yandex.practicum.filmoreate.storage.InMemoryFriendsStorage;
+import ru.yandex.practicum.filmoreate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -17,12 +20,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class UserTests {
-    private static final UserController userController = new UserController();
+    private InMemoryUserStorage inMemoryUserStorage = null;
+    private UserService userService = null;
+    private UserController userController = null;
+    private InMemoryFriendsStorage inMemoryFriendsStorage = null;
     private User user;
 
     @BeforeEach
     public void beforeEach() {
         user = new User(0L, "email@domain.ru", "login", "name", LocalDate.now().minusYears(1));
+        this.inMemoryUserStorage = new InMemoryUserStorage();
+        this.inMemoryFriendsStorage = new InMemoryFriendsStorage();
+        this.userService = new UserService(this.inMemoryUserStorage, this.inMemoryFriendsStorage);
+        this.userController = new UserController(this.inMemoryUserStorage, this.userService);
     }
 
     @Test

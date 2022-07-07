@@ -10,10 +10,11 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
+import static ru.yandex.practicum.filmoreate.utils.FilmUtil.MAX_DESCRIPTION_LEN;
+
 @Data
 @AllArgsConstructor
 public class Film {
-    private final int MAX_DESCRIPTION_LEN = 200;
 
     private Long id;
 

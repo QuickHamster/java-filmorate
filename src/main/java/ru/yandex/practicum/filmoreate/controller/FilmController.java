@@ -3,17 +3,15 @@ package ru.yandex.practicum.filmoreate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmoreate.exception.*;
 import ru.yandex.practicum.filmoreate.model.Film;
 
-import static ru.yandex.practicum.filmoreate.utils.FilmUtil.DATE_BIRTHDAY_CINEMA;
-import static ru.yandex.practicum.filmoreate.utils.FilmUtil.MAX_DESCRIPTION_LEN;
-import ru.yandex.practicum.filmoreate.utils.IdGenerator;
+import ru.yandex.practicum.filmoreate.service.FilmService;
+import ru.yandex.practicum.filmoreate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmoreate.storage.InMemoryLikesStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,66 +21,65 @@ import java.util.Map;
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class FilmController {
+    private final InMemoryFilmStorage inMemoryFilmStorage;
+    private final FilmService filmService;
+    private final InMemoryLikesStorage inMemoryLikesStorage;
 
-    private final Map<Long, Film> films = new HashMap<>();
+    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, FilmService filmService, InMemoryLikesStorage inMemoryLikesStorage) {
+        this.inMemoryFilmStorage = inMemoryFilmStorage;
+        this.filmService = filmService;
+        this.inMemoryLikesStorage = inMemoryLikesStorage;
+    }
 
     @GetMapping
     public Collection<Film> getFilms() {
-        log.debug("Текущее количество фильмов: {}", films.size());
-        return films.values();
+        log.debug("Текущее количество фильмов: {}", inMemoryFilmStorage.getFilms().size());
+        return inMemoryFilmStorage.getFilms();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film create(@Valid @RequestBody Film film) {
-        makeFilm(true, film);
-        log.debug("Добавлен фильм: {}", film);
-        return film;
+        long filmId = inMemoryFilmStorage.add(film);
+        inMemoryLikesStorage.addFilmToLikesStorage(filmId);
+        log.debug("Добавлен фильм: {}", inMemoryFilmStorage.findFilmById(filmId));
+        return inMemoryFilmStorage.findFilmById(filmId);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Film put(@Valid @RequestBody Film film) {
-        makeFilm(false, film);
-        log.debug("Обновлен фильм: {}", film);
-        return film;
+        long filmId = inMemoryFilmStorage.update(film);
+        log.debug("Обновлен фильм: {}", inMemoryFilmStorage.findFilmById(filmId));
+        return inMemoryFilmStorage.findFilmById(filmId);
     }
 
-    private void makeFilm(boolean newFilm, Film film) {
+    @DeleteMapping
+    public Long remove(@Valid Long filmId) {
+        inMemoryLikesStorage.removeFilmFromLikesStorage(filmId);
+        return inMemoryFilmStorage.delete(filmId);
+    }
 
-        if (film != null) {
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable Long id) {
+        return inMemoryFilmStorage.findFilmById(id);
+    }
 
-            if (film.getName().isBlank()) {
-                log.debug("Пустое название фильма");
-                throw new InvalidFilmName("Название фильма не должно быть пустым.");
-            }
+    @PutMapping("/{id}/like/{userId}") // пользователь ставит лайк фильму
+    @ResponseBody
+    public Film addLike(@PathVariable Long id, @PathVariable Long userId) {
+        long filmId = filmService.addLike(id, userId);
+        return inMemoryFilmStorage.findFilmById(filmId);
+    }
 
-            if (film.getDescription().length() > MAX_DESCRIPTION_LEN) {
-                log.info("Превышена допустимая длина описания фильма. Описание обрезано до {} символов.", MAX_DESCRIPTION_LEN);
-                film.setDescription(film.getDescription().substring(0, MAX_DESCRIPTION_LEN));
-            }
+    @DeleteMapping("/{id}/like/{userId}") // пользователь удаляет лайк
+    @ResponseBody
+    public Film removeLike(@PathVariable Long id, @PathVariable Long userId) {
+        long filmId = filmService.removeLike(id, userId);
+        return inMemoryFilmStorage.findFilmById(filmId);
+    }
 
-            if (film.getReleaseDate().isBefore(DATE_BIRTHDAY_CINEMA)) {
-                log.debug("Некорректная дата релиза.");
-                throw new InvalidFilmRelease("Дата релиза фильма не может быть раньше 28 декабря 1895 года (день рождения кино).");
-            }
-
-            if (film.getDuration() < 0) {
-                log.debug("Отрицательная продолжительность фильма.");
-                throw new InvalidFilmDuration("Продолжительность фильма должна быть положительной.");
-            }
-
-            if (newFilm) {
-                film.setId(IdGenerator.createFilmId());
-                films.put(film.getId(), film);
-            } else if (films.containsKey(film.getId())) {
-                films.put(film.getId(), film);
-            } else {
-                log.debug("Фильм с id = {} не существует.", film.getId());
-                throw new ValidationException("Фильм с id = " + film.getId() + " не существует.");
-            }
-
-        } else {
-            log.debug("Пустое тело запроса.");
-            throw new ValidationException("Тело запроса не должно быть пустым.");
-        }
+    @GetMapping("/popular") // popular?count={count} - возвращает список из первых count фильмов по количеству лайков
+    @ResponseBody
+    public List<Film> getPopularFilms(@RequestParam(defaultValue = "0", required = false) Integer count) {
+        return filmService.getPopularFilms(count);
     }
 }
