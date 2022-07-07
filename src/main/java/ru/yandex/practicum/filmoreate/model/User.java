@@ -29,5 +29,7 @@ public class User {
     @NonNull
     @Past(message = "Invalid past date birthday.")
     private LocalDate birthday;
+
+    private int friendship;
 }
 

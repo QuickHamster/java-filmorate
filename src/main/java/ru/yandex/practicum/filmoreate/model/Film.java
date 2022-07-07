@@ -32,4 +32,8 @@ public class Film {
     @NonNull
     @Positive(message = "Duration film should be positive.")
     private Integer duration;
+
+    private String genre;
+    
+    private String rate;
 }
