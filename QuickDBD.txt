@@ -1,0 +1,48 @@
+user
+-
+user_id PK bigint
+email varchar(x)
+login varchar(x)
+name varchar(x)
+birthday date # YYYY-MM-DD
+
+
+friendship_status 
+-
+friendship_status_id PK bigint
+name varchar(x)
+
+film 
+--
+film_id PK bigint FK >- genre.film_id
+name varchar(x)
+description varchar(x)
+release_date date # YYYY-MM-DD
+duration smallint
+rate_id int FK >- rate.rate_id
+
+genres 
+--
+genre_id PK int
+name varchar(x)
+
+rate 
+--
+rate_id PK int
+name varchar(x)
+
+friends 
+---
+user_id PK bigint FK -< user.user_id
+friend_id bigint FK -< user.user_id
+friendship_status_id int FK >- friendship_status.friendship_status_id
+
+likes 
+----
+film_id PK bigint FK >- film.film_id
+user_id bigint FK >- user.user_id
+
+genre
+---
+film_id PK bigint
+genre_id int FK >- genres.genre_id
