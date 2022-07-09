@@ -29,7 +29,7 @@ class FilmTests {
 
     @BeforeEach
     public void beforeEach() {
-        film = new Film(0L, "name", "description", LocalDate.now().minusYears(1), 110);
+        film = new Film(0L, "name", "description", LocalDate.now().minusYears(1), 110, "", "");
         this.inMemoryFilmStorage = new InMemoryFilmStorage();
         this.inMemoryLikesStorage = new InMemoryLikesStorage();
         this.inMemoryUserStorage = new InMemoryUserStorage();
@@ -39,19 +39,19 @@ class FilmTests {
 
     @Test
     void nameIsNull() {
-        Exception exception = assertThrows(RuntimeException.class, () -> new Film(0L, null, "description", LocalDate.now().minusYears(1), 110));
+        Exception exception = assertThrows(RuntimeException.class, () -> new Film(0L, null, "description", LocalDate.now().minusYears(1), 110, "", ""));
         assertEquals("name is marked non-null but is null", exception.getMessage());
     }
 
     @Test
     void releaseDateIsNull() {
-        Exception exception = assertThrows(RuntimeException.class, () -> new Film(0L, "name", "description", null, 110));
+        Exception exception = assertThrows(RuntimeException.class, () -> new Film(0L, "name", "description", null, 110, "", ""));
         assertEquals("releaseDate is marked non-null but is null", exception.getMessage());
     }
 
     @Test
     void durationIsNull() {
-        Exception exception = assertThrows(RuntimeException.class, () -> new Film(0L, "name", "description", LocalDate.now().minusYears(1), null));
+        Exception exception = assertThrows(RuntimeException.class, () -> new Film(0L, "name", "description", LocalDate.now().minusYears(1), null, "", ""));
         assertEquals("duration is marked non-null but is null", exception.getMessage());
     }
 

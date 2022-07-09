@@ -28,7 +28,7 @@ class UserTests {
 
     @BeforeEach
     public void beforeEach() {
-        user = new User(0L, "email@domain.ru", "login", "name", LocalDate.now().minusYears(1));
+        user = new User(0L, "email@domain.ru", "login", "name", LocalDate.now().minusYears(1), 0);
         this.inMemoryUserStorage = new InMemoryUserStorage();
         this.inMemoryFriendsStorage = new InMemoryFriendsStorage();
         this.userService = new UserService(this.inMemoryUserStorage, this.inMemoryFriendsStorage);
@@ -37,25 +37,25 @@ class UserTests {
 
     @Test
     void emailIsNull() {
-        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, null, "login", "name", LocalDate.now().minusYears(1)));
+        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, null, "login", "name", LocalDate.now().minusYears(1),0));
         assertEquals("email is marked non-null but is null", exception.getMessage());
     }
 
     @Test
     void loginIsNull() {
-        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, "email@domain.ru", null, "name", LocalDate.now().minusYears(1)));
+        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, "email@domain.ru", null, "name", LocalDate.now().minusYears(1),0));
         assertEquals("login is marked non-null but is null", exception.getMessage());
     }
 
     @Test
     void nameIsNull() {
-        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, "email@domain.ru", "login", null, LocalDate.now().minusYears(1)));
+        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, "email@domain.ru", "login", null, LocalDate.now().minusYears(1),0));
         assertEquals("name is marked non-null but is null", exception.getMessage());
     }
 
     @Test
     void birthdayIsNull() {
-        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, "email@domain.ru", "login", "name", null));
+        Exception exception = assertThrows(RuntimeException.class, () -> new User(0L, "email@domain.ru", "login", "name", null, 0));
         assertEquals("birthday is marked non-null but is null", exception.getMessage());
     }
 
