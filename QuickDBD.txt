@@ -9,7 +9,7 @@ birthday date # YYYY-MM-DD
 
 friendship_status 
 -
-friendship_status_id PK bigint
+friendship_status_id PK int
 name varchar(x)
 
 film 
